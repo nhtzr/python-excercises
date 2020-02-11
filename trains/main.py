@@ -43,7 +43,7 @@ def shortest_route_length(*nodes, graph):
             return 'NO SUCH ROUTE'
 
 
-def has_duplicates_hops(route: Route):
+def has_duplicate_stops(route: Route):
     if len(route.edges) < 2:
         return False
     hops = [route.edges[0].origin, *(hop.dest for hop in route.edges)]
@@ -69,7 +69,7 @@ def all_routes(origin: str, final_stop: str, graph: Dict[Hop, Edge],
                     curr_route.distance + next_edge.distance)
                 if next_edge.dest == final_stop:
                     yield next_route
-                if not has_duplicates_hops(next_route):
+                if not has_duplicate_stops(next_route):
                     next_routes.append(next_route)
 
 
