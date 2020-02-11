@@ -1,23 +1,11 @@
 import fileinput
-import sys
 from collections import defaultdict
-from typing import Iterator, NamedTuple, Dict, Iterable, List
+from typing import Iterator, Dict, Iterable, List
 
+import sys
 
-class Hop(NamedTuple):
-    origin: str
-    dest: str
-
-
-class Edge(NamedTuple):
-    origin: str
-    dest: str
-    distance: int
-
-
-class Route(NamedTuple):
-    edges: List[Edge]
-    distance: int
+from trains.data import Hop, Edge, Route
+from trains.route import has_duplicate_stops, max_3_stops, has_4_stops
 
 
 def distance_of(*nodes, graph):
@@ -41,13 +29,6 @@ def shortest_route_length(*nodes, graph):
         edge = graph.get(Hop(curr_node, next_node), None)
         if edge is None:
             return 'NO SUCH ROUTE'
-
-
-def has_duplicate_stops(route: Route):
-    if len(route.edges) < 2:
-        return False
-    hops = [route.edges[0].origin, *(hop.dest for hop in route.edges)]
-    return len(set(hops)) != len(hops)
 
 
 def all_routes(origin: str, final_stop: str, graph: Dict[Hop, Edge],
@@ -78,18 +59,6 @@ def gen_edges_by_origin(graph: Dict[Hop, Edge]) -> Dict[str, List[Edge]]:
     for (hop, edge) in graph.items():
         routes_by_origin[hop.origin].append(edge)
     return routes_by_origin
-
-
-def is_shorter_than_30(route: Route):
-    return route.distance < 30
-
-
-def max_3_stops(route: Route):
-    return len(route.edges) <= 3
-
-
-def has_4_stops(route: Route):
-    return len(route.edges) == 4
 
 
 def main(line_input: Iterator[str], output=sys.stdout):
