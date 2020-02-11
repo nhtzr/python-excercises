@@ -24,6 +24,7 @@ def distance_of(*nodes, graph):
 
 
 def shortest_route_length(*nodes, graph):
+    raise NotImplementedError()
     curr_node, *remaining_nodes = nodes
     for next_node in remaining_nodes:
         edge = graph.get(Hop(curr_node, next_node), None)
