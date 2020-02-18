@@ -1,4 +1,4 @@
-from typing import NamedTuple, List
+from typing import NamedTuple, List, Dict
 
 
 class Hop(NamedTuple):
@@ -15,3 +15,8 @@ class Edge(NamedTuple):
 class Route(NamedTuple):
     edges: List[Edge]
     distance: int
+
+
+class Graph(NamedTuple):
+    graph: Dict[Hop, Edge]
+    by_origin: Dict[str, List[Edge]]
