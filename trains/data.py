@@ -18,5 +18,5 @@ class Route(NamedTuple):
 
 
 class Graph(NamedTuple):
-    graph: Dict[Hop, Edge]
+    by_hop: Dict[Hop, Edge]
     by_origin: Dict[str, List[Edge]]

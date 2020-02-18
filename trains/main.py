@@ -3,7 +3,7 @@ from typing import Iterator, Iterable, Dict
 
 import sys
 
-from trains.data import Hop, Route
+from trains.data import Hop, Route, Graph
 from trains.parse import parse_graph
 from trains.route import has_duplicate_stops, max_3_stops, has_4_stops
 
@@ -55,13 +55,13 @@ def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
 
 
 def main(line_input: Iterator[str], output=sys.stdout):
-    graph = parse_graph(next(line_input))
+    graph: Graph = parse_graph(next(line_input))
 
-    print(distance_of('A', 'B', 'C', graph=graph.graph), file=output)
-    print(distance_of('A', 'D', graph=graph.graph), file=output)
-    print(distance_of('A', 'D', 'C', graph=graph.graph), file=output)
-    print(distance_of('A', 'E', 'B', 'C', 'D', graph=graph.graph), file=output)
-    print(distance_of('A', 'E', 'D', graph=graph.graph), file=output)
+    print(distance_of('A', 'B', 'C', graph=graph.by_hop), file=output)
+    print(distance_of('A', 'D', graph=graph.by_hop), file=output)
+    print(distance_of('A', 'D', 'C', graph=graph.by_hop), file=output)
+    print(distance_of('A', 'E', 'B', 'C', 'D', graph=graph.by_hop), file=output)
+    print(distance_of('A', 'E', 'D', graph=graph.by_hop), file=output)
 
     # The number of trips starting at C and ending at C with a maximum of 3 stops.
     # In the sample data below,
