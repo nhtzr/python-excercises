@@ -1,7 +1,9 @@
-import sys
-from typing import Dict, Iterable
+from queue import PriorityQueue
+from typing import Iterable, Tuple
 
-from trains.data import Hop, Route
+import sys
+
+from trains.data import Hop, Route, Graph
 from trains.route import has_duplicate_stops
 
 
@@ -20,14 +22,37 @@ def distance_of(*nodes, graph):
     return str(route_distance)
 
 
-def shortest_route_length(first_origin, final_dest, graph: Dict):
-    raise NotImplementedError()
+def shortest_route_length(first_origin: str, final_dest: str, graph: Graph):
+    distances = dict((node, sys.maxsize)
+                     for hop in graph.by_hop.keys()
+                     for node in hop)
 
-    distance_from_origin = dict((node, sys.maxsize)
-                                for hop in graph.keys()
-                                for node in hop)
-    # Distance to each node in graph from origin
-    distance_from_origin[first_origin] = 0
+    visited = set()
+    queue: PriorityQueue[Tuple[int, str]] = PriorityQueue()
+    # distances[first_origin] = 0  # Distance to each node in graph from origin
+    #                              However we are expected to give the route with one hop at least
+    #                              So we are leaving distance from output as infinity
+    #                              And still seed the queue with the origin.
+    #                              (Seed distance / Priority number <0> can be ignored)
+    queue.put((0, first_origin))
+    while not queue.empty():
+        curr_distance, curr_origin = queue.get()
+        if curr_origin in visited:
+            continue
+        next_edges = graph.by_origin[curr_origin]
+        for next_edge in next_edges:
+            next_dest = next_edge.dest
+            new_distance = curr_distance + next_edge.distance
+            old_distance = distances[next_dest]
+            if new_distance < old_distance:
+                distances[next_dest] = new_distance
+                queue.put((new_distance, next_edge.dest))
+        visited.add(curr_origin)
+
+    route_length = distances.get(final_dest, None)
+    if route_length is None:
+        return 'NO SUCH ROUTE'
+    return route_length
 
 
 def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
