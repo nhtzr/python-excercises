@@ -56,19 +56,18 @@ def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
 
 def main(line_input: Iterator[str], output=sys.stdout):
     graph = parse_graph(next(line_input))
-    graph_ = graph._asdict()
 
-    print(distance_of('A', 'B', 'C', **graph_), file=output)
-    print(distance_of('A', 'D', **graph_), file=output)
-    print(distance_of('A', 'D', 'C', **graph_), file=output)
-    print(distance_of('A', 'E', 'B', 'C', 'D', **graph_), file=output)
-    print(distance_of('A', 'E', 'D', **graph_), file=output)
+    print(distance_of('A', 'B', 'C', graph=graph.graph), file=output)
+    print(distance_of('A', 'D', graph=graph.graph), file=output)
+    print(distance_of('A', 'D', 'C', graph=graph.graph), file=output)
+    print(distance_of('A', 'E', 'B', 'C', 'D', graph=graph.graph), file=output)
+    print(distance_of('A', 'E', 'D', graph=graph.graph), file=output)
 
     # The number of trips starting at C and ending at C with a maximum of 3 stops.
     # In the sample data below,
     # there are two such trips: C-D-C (2 stops). and C-E-B-C (3 stops).
     print(len(list(filter(max_3_stops, all_routes(
-        'C', 'C', **graph_
+        'C', 'C', by_origin=graph.by_origin
     )))), file=output)
 
     # The number of trips starting at A and ending at C with exactly 4 stops.
@@ -76,7 +75,7 @@ def main(line_input: Iterator[str], output=sys.stdout):
     # there are three such trips: A to C (via B,C,D);
     #   A to C (via D,C,D); and A to C (via D,E,B).
     print(len(list(filter(has_4_stops, all_routes(
-        'A', 'C', **graph_
+        'A', 'C', by_origin=graph.by_origin
     )))), file=output)
 
     # print(shortest_route_length('A', 'C', graph=graph), file=output)
