@@ -3,7 +3,8 @@ from typing import List
 from trains.data import Route, Edge
 
 
-def has_duplicate_stops(edges: List[Edge]):
+def has_duplicate_stops(route: Route):
+    edges = route.edges
     if len(edges) < 2:
         return False
     hops = [edges[0].origin, *(hop.dest for hop in edges)]

@@ -71,5 +71,5 @@ def all_routes(origin: str, final_stop: str, by_origin=None, stop_cond=has_dupli
             gen_route = Route(gen_edges, gen_distance)
             if next_edge.dest == final_stop:
                 yield gen_route
-            if not stop_cond(gen_edges):
+            if not stop_cond(gen_route):
                 queue.put(gen_route)
