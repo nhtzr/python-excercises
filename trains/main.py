@@ -21,7 +21,7 @@ def main(line_input: Iterator[str], output=sys.stdout):
         'C', 'C', by_origin=graph.by_origin
     )))), file=output)
     print(len(list(filter(has_4_stops, all_routes(
-        'A', 'C', by_origin=graph.by_origin
+        'A', 'C', by_origin=graph.by_origin, stop_cond=lambda x: len(x) > 4
     )))), file=output)
     print(shortest_route_length('A', 'C', graph=graph), file=output)
     print(shortest_route_length('B', 'B', graph=graph), file=output)

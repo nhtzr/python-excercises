@@ -55,7 +55,7 @@ def shortest_route_length(first_origin: str, final_dest: str, graph: Graph):
     return route_length
 
 
-def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
+def all_routes(origin: str, final_stop: str, by_origin=None, stop_cond=has_duplicate_stops) -> Iterable[Route]:
     queue = LifoQueue()
     for e in by_origin[origin]:
         queue.put(Route(
@@ -71,5 +71,5 @@ def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
             gen_route = Route(gen_edges, gen_distance)
             if next_edge.dest == final_stop:
                 yield gen_route
-            if not has_duplicate_stops(gen_edges):
+            if not stop_cond(gen_edges):
                 queue.put(gen_route)
