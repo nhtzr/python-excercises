@@ -3,6 +3,7 @@ import unittest
 from trains.data import Route, Edge
 from trains.graph import shortest_route_length, all_routes
 from trains.parse import parse_graph
+from trains.route import max_4_stops
 
 
 class GraphTestCase(unittest.TestCase):
@@ -39,7 +40,7 @@ class GraphTestCase(unittest.TestCase):
 
     def test_all_routes_2(self):
         graph = parse_graph('AB5, BC4, CD8, DC8, DE6, AD5, CE2, EB3, AE7')
-        actual = all_routes('A', 'C', graph.by_origin, stop_cond=lambda x: len(x) > 4)
+        actual = all_routes('A', 'C', graph.by_origin, iter_cond=max_4_stops)
         # there are three such trips: A to C (via B,C,D);
         #   A to C (via D,C,D); and A to C (via D,E,B).
         actual_ = [*actual]

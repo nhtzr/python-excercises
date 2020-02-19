@@ -6,7 +6,7 @@ import sys
 from trains.data import Graph
 from trains.graph import distance_of, all_routes, shortest_route_length
 from trains.parse import parse_graph
-from trains.route import max_3_stops, has_4_stops, is_shorter_than_30
+from trains.route import max_3_stops, has_4_stops, is_shorter_than_30, max_4_stops
 
 
 def main(line_input: Iterator[str], output=sys.stdout):
@@ -21,12 +21,12 @@ def main(line_input: Iterator[str], output=sys.stdout):
         'C', 'C', by_origin=graph.by_origin
     )))), file=output)
     print(len(list(filter(has_4_stops, all_routes(
-        'A', 'C', by_origin=graph.by_origin, stop_cond=lambda x: len(x.edges) > 4
+        'A', 'C', by_origin=graph.by_origin, iter_cond=max_4_stops
     )))), file=output)
     print(shortest_route_length('A', 'C', graph=graph), file=output)
     print(shortest_route_length('B', 'B', graph=graph), file=output)
     print(len(list(filter(is_shorter_than_30, all_routes(
-        'C', 'C', by_origin=graph.by_origin, stop_cond=lambda x: not is_shorter_than_30(x)
+        'C', 'C', by_origin=graph.by_origin, iter_cond=is_shorter_than_30
     )))), file=output)
 
 
