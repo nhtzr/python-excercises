@@ -11,7 +11,6 @@ class TrainsTestCase(unittest.TestCase):
         main(given, output=output_io)
         output = output_io.getvalue()
         self.assertEqual(
-            output,
             '9\n'
             '5\n'
             '13\n'
@@ -21,7 +20,8 @@ class TrainsTestCase(unittest.TestCase):
             '3\n'
             '9\n'
             '9\n'
-            '7\n'
+            '7\n',
+            output
         )
 
 
