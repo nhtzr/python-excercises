@@ -1,4 +1,4 @@
-from queue import PriorityQueue
+from queue import PriorityQueue, LifoQueue
 from typing import Iterable, Tuple
 
 import sys
@@ -60,17 +60,20 @@ def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
         Route([edge], edge.distance)
         for edge in (by_origin[origin]))
 
-    while len(next_routes) > 0:
-        curr_routes = next_routes
-        next_routes = list()
-        for curr_route in curr_routes:
-            latest_stop = curr_route.edges[-1].dest
-            curr_options = by_origin[latest_stop]
-            for next_edge in curr_options:
-                next_route = Route(
-                    [*curr_route.edges, next_edge],
-                    curr_route.distance + next_edge.distance)
-                if next_edge.dest == final_stop:
-                    yield next_route
-                if not has_duplicate_stops(next_route):
-                    next_routes.append(next_route)
+    queue = LifoQueue()
+    for e in by_origin[origin]:
+        queue.put(Route(
+            edges=[e],
+            distance=e.distance))
+    while not queue.empty():
+        curr_route = queue.get()
+        latest_stop = curr_route.edges[-1].dest
+        curr_options = by_origin[latest_stop]
+        for next_edge in curr_options:
+            gen_edges = [*curr_route.edges, next_edge]
+            gen_distance = sum(e.distance for e in gen_edges)
+            gen_route = Route(gen_edges, gen_distance)
+            if next_edge.dest == final_stop:
+                yield gen_route
+            if not has_duplicate_stops(gen_edges):
+                queue.put(gen_route)
