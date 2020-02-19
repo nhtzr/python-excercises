@@ -56,10 +56,6 @@ def shortest_route_length(first_origin: str, final_dest: str, graph: Graph):
 
 
 def all_routes(origin: str, final_stop: str, by_origin=None) -> Iterable[Route]:
-    next_routes = list(
-        Route([edge], edge.distance)
-        for edge in (by_origin[origin]))
-
     queue = LifoQueue()
     for e in by_origin[origin]:
         queue.put(Route(
